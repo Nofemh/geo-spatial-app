@@ -169,6 +169,11 @@ def main():
         st.write("Displaying interactive map...")
         st.map(dataset[['LATITUDE', 'LONGITUDE']])
 
-# Run the app
 if __name__ == "__main__":
-    main()
+    # Specify the host and port for running the Streamlit app
+    host = '0.0.0.0'  # Listen on all network interfaces
+    port = 8501  # Use port 8501
+
+    # Run the Streamlit app with the specified host and port
+    main.run(host=host, port=port)
+
