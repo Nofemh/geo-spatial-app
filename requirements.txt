@@ -1,0 +1,11 @@
+numpy
+pandas
+pyproj
+pykrige
+matplotlib
+scikit-learn
+geopandas
+shapely
+lightgbm
+seaborn
+streamlit
