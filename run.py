@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 from scipy.optimize import minimize
 import folium
 from streamlit_folium import folium_static
+from sklearn.linear_model import Ridge
 
 
 
