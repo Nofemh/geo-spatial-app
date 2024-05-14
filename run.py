@@ -15,6 +15,7 @@ import lightgbm as lgb
 import seaborn as sns
 import streamlit as st
 import altair as alt
+from datetime import datetime, timedelta
 
 def geometric_median(points: list):
     points = np.array(points)
@@ -49,23 +50,20 @@ def get_dist_bearing(center, point):
     fwd_azimuth, back_azimuth, distance = geodisc.inv(lon1, lat1, lon2, lat2)
     return distance, fwd_azimuth
 
-
 def main():
-    st.title("Climate Data Analysis App")
+    st.title("Geospatial analysis")
     st.sidebar.title("Menu")
     menu = st.sidebar.selectbox("Select an option", ["Overview", "Data Analysis"])
 
     if menu == "Overview":
-        if menu == "Overview":
-         st.subheader("Overview")
-         st.write("Welcome to the Climate Data Analysis App!")
-         st.write("Geospatial analysis is a powerful approach for examining and interpreting data that possesses a spatial or geographical component. By leveraging geographic information systems (GIS) and various analytical techniques, geospatial analysis allows us to uncover valuable insights about our world.")
-         st.write("In this project, our focus is on exploring climate data within the context of the Kingdom of Saudi Arabia. By harnessing geospatial analysis techniques, we aim to gain a deeper understanding of the intricate relationships between climatic factors and geographical features within this region.")
-         st.write("The Kingdom of Saudi Arabia, with its vast and diverse landscape, presents an intriguing dataset for geospatial analysis. Across different geographical locations offers a rich tapestry for exploration.")
-         st.write("Through this app, we'll delve into climate data sourced from various observation stations across Saudi Arabia. By examining parameters such as temperature, elevation, and humidity, we'll unravel spatial patterns and correlations, shedding light on the complex interplay between environmental factors.")
-         st.write("Join us on this journey as we employ geospatial analysis techniques to decipher the climate data of the Kingdom of Saudi Arabia, uncovering insights that may help scientific research.")
+        st.subheader("Overview")
+        st.write("Geospatial analysis")
+        st.write("Geospatial analysis is a powerful approach for examining and interpreting data that possesses a spatial or geographical component. By leveraging geographic information systems (GIS) and various analytical techniques, geospatial analysis allows us to uncover valuable insights about our world.")
+        st.write("In this project, our focus is on exploring climate data within the context of the Kingdom of Saudi Arabia. By harnessing geospatial analysis techniques, we aim to gain a deeper understanding of the intricate relationships between climatic factors and geographical features within this region.")
+        st.write("The Kingdom of Saudi Arabia, with its vast and diverse landscape, presents an intriguing dataset for geospatial analysis. Across different geographical locations offers a rich tapestry for exploration.")
+        st.write("Through this app, we'll delve into climate data sourced from various observation stations across Saudi Arabia. By examining parameters such as temperature, elevation, and humidity, we'll unravel spatial patterns and correlations, shedding light on the complex interplay between environmental factors.")
+        st.write("Join us on this journey as we employ geospatial analysis techniques to decipher the climate data of the Kingdom of Saudi Arabia, uncovering insights that may help scientific research.")
 
-        pass
     elif menu == "Data Analysis":
         st.subheader("Data Analysis Section")
         st.write("Welcome to the Data Analysis section! In this section, we will explore various geospatial analysis techniques to gain insights into climate data related to the Kingdom of Saudi Arabia.")
@@ -93,8 +91,9 @@ def main():
         st.write("- Random Forest")
         st.write("- LightGBM")
         st.write("- K-Nearest Neighbors (KNN)")
+        st.write("- Ridge Regression")
 
-        st.write("After training and testing each model, we'll compare their performance using Mean Squared Error (MSE).")
+        st.write("After training and testing each model, we'll compare their performance using R^2.")
 
         models = ['SVR', 'Random Forest', 'LightGBM', 'KNN']
         results = {}
@@ -119,17 +118,56 @@ def main():
             mse = mean_squared_error(y_test, y_pred)
             results[model_name] = mse
 
-        st.write("Here are the model evaluation results:")
-        for model_name, mse in results.items():
-            mse_formatted = round(mse, 2)
-            st.write(f"- {model_name}: Mean Squared Error (MSE) = {mse_formatted}")
+        # st.write("Here are the model evaluation results:")
+        # for model_name, mse in results.items():
+        #     mse_formatted = round(mse, 2)
+        #     st.write(f"- {model_name}: Mean Squared Error (MSE) = {mse_formatted}")
 
-        st.write("Based on the evaluation results using Mean Squared Error (MSE), it's evident that the performance of the different regression models varies significantly.")
-        st.write("1. Support Vector Regression (SVR) achieved the lowest MSE of 15.17, indicating that it provided the best overall fit to the data among the models evaluated.")
-        st.write("2. LightGBM, a gradient boosting framework, also performed well with an MSE of 434.96, demonstrating its effectiveness in capturing complex relationships within the data.")
-        st.write("3. K-Nearest Neighbors (KNN) and Random Forest showed higher MSE values compared to SVR and LightGBM, suggesting that they might not have generalized as well to the test data or might have overfit the training data to some extent.")
-        st.write("4. Random Forest exhibited the highest MSE among the models evaluated, with a value of 4866.61, indicating that it might not be the most suitable model for this particular dataset or that its hyperparameters need further tuning to improve performance.")
-        st.write("In conclusion, while SVR and LightGBM emerged as the top-performing models based on MSE, further analysis, such as examining other evaluation metrics and fine-tuning model parameters, may be warranted to ensure the selection of the most appropriate model for predicting air temperature based on the given features.")
+        st.write("Based on the evaluation results, it's evident that the performance of the different regression models varies .")
+        st.write("1.KNN had the highest ranking")
+        st.write("2. LightGBM is second")
+        st.write("3.the rest of the models are quite close to eachother in terms they all did worse than our top ranking models")
+
+        # Integrate KNN model evaluation
+        st.write("Let's also employ the K-Nearest Neighbors (KNN) model:")
+        st.write("Please input the following features:")
+        
+        start_date = datetime.today() - timedelta(days=365*24)
+        end_date = datetime.today()
+
+        
+    
+
+        # Input fields
+        dist_input = st.number_input("Distance", value=0.0)
+        direc_input = st.number_input("Direction", value=0.0)
+        elevation_input = st.number_input("Elevation", value=1, min_value=1, max_value=10)
+        day_input = st.selectbox("Day of Year", [str(day) for day in range(1, 366)])
+        hour_input = st.selectbox("Hour", [str(hour) for hour in range(1, 25)])
+        dew_point_input = st.number_input("Dew Point", value=0.0)
+
+        # Convert input values to numeric data types
+        dist_input = float(dist_input)
+        direc_input = float(direc_input)
+        elevation_input = int(elevation_input)
+        day_input = float(day_input)
+        hour_input = float(hour_input)
+        dew_point_input = float(dew_point_input)
+
+        # KNN model prediction
+        knn_features = [dist_input, direc_input, elevation_input, day_input, hour_input, dew_point_input]
+        knn_X = np.array(knn_features).reshape(1, -1)
+
+        # Convert knn_X to float64
+        knn_X = knn_X.astype(np.float64)
+
+        # KNN model prediction
+        knn_model = KNeighborsRegressor()
+        knn_model.fit(X_train, y_train)
+        knn_prediction = knn_model.predict(knn_X)
+
+        st.write(f"Predicted Air Temperature (KNN): {knn_prediction[0]:.2f} °C")
+
 
 if __name__ == "__main__":
     main()
