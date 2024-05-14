@@ -88,7 +88,7 @@ def main():
         st.write("Let's start by exploring regression models for predicting air temperature based on various features.")
         st.write("We'll evaluate the following regression models:")
         st.write("- Support Vector Regression (SVR)")
-        st.write("- Random Forest")
+        st.write("- gradient boosting regressor")
         st.write("- LightGBM")
         st.write("- K-Nearest Neighbors (KNN)")
         st.write("- Ridge Regression")
