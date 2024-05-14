@@ -114,29 +114,31 @@ def page_data_analysis():
     st.write("After training and testing each model, we'll compare their performance using R^2 and Mean Squared Error.")
     
 
-    models = ['SVR', 'gradiant boost', 'LightGBM', 'KNN']
-    results = {}
-    for model_name in models:
-        X = dataset[features]
-        y = dataset['AIR_TEMPERATURE']
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    models = ['SVR', 'gradiant boost', 'LightGBM', 'KNN', 'Ridge']  # Add 'Ridge' to the list of models
+for model_name in models:
+    X = dataset[features]
+    y = dataset['AIR_TEMPERATURE']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-        if model_name == 'SVR':
-            model = SVR()
-        elif model_name == 'gradiant boost':
-            model = GradientBoostingRegressor()
-        elif model_name == 'LightGBM':
-            model = lgb.LGBMRegressor()
-        elif model_name == 'KNN':
-            model = KNeighborsRegressor()
+    if model_name == 'SVR':
+        model = SVR()
+    elif model_name == 'gradiant boost':
+        model = GradientBoostingRegressor()
+    elif model_name == 'LightGBM':
+        model = lgb.LGBMRegressor()
+    elif model_name == 'KNN':
+        model = KNeighborsRegressor()
+    elif model_name == 'Ridge':  # Add Ridge Regression model
+        model = Ridge(alpha=1.0)  # You can adjust the alpha parameter as needed
 
-        model.fit(X_train, y_train)
+    model.fit(X_train, y_train)
 
-        y_pred = model.predict(X_test)
+    y_pred = model.predict(X_test)
 
-        mse = mean_squared_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
-        results[model_name] = {'MSE': mse, 'R^2': r2}
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    results[model_name] = {'MSE': mse, 'R^2': r2}
+
 
     mse_r2_df = pd.DataFrame(results).T
     st.write("Model Evaluation:")
